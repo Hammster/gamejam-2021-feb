@@ -14,8 +14,6 @@ public class DevEnviromentLoader : MonoBehaviour
             var loadedScene = SceneManager.GetActiveScene().name;
             UnityEngine.SceneManagement.SceneManager.LoadScene("_preload");
             UnityEngine.SceneManagement.SceneManager.LoadScene(loadedScene);
-            app = GameObject.Find("__app");
         }
-        Reference.GetInstance().boardManager = GameObject.Find("BoardManager").GetComponent<BoardManager>();
     }
 }

@@ -12,9 +12,13 @@ public class BoardManager : MonoBehaviour
     private Tile[,] board;
     private bool pressed = false;
     private Tile higlightedTile = null;
+    
     public void Awake() {
         CreateBoard("abcabc");
+        // Self register at reference
+        Reference.GetInstance().boardManager = gameObject.GetComponent<BoardManager>();
     }
+
     public void CreateBoard(string seed)
     {
         Random.InitState(seed.GetHashCode());

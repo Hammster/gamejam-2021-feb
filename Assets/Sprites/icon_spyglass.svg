@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 76 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-2861,-1729)">
+        <g transform="matrix(2.69775,0,0,1.44916,4378.24,1772.66)">
+            <g id="icon_spyglass" transform="matrix(2.91628,0,0,3.51934,962.848,516.422)">
+                <g transform="matrix(0.100523,-0.0716973,0.044064,0.163564,-526.287,-156.737)">
+                    <rect x="9.71" y="56.57" width="30.72" height="9.6" style="fill:rgb(244,182,62);"/>
+                </g>
+                <g transform="matrix(0.100523,-0.0716973,0.044064,0.163564,-525.58,-155.125)">
+                    <rect x="34.48" y="44.23" width="30.72" height="12.55" style="fill:rgb(221,150,13);"/>
+                </g>
+                <g transform="matrix(0.100523,-0.0716973,0.044064,0.163564,-524.854,-153.469)">
+                    <rect x="59.89" y="30.62" width="30.72" height="17.49" style="fill:rgb(144,98,8);"/>
+                </g>
+                <g transform="matrix(0.100523,-0.0716973,0.044064,0.163564,-524.452,-152.54)">
+                    <rect x="88.3" y="23.11" width="2.38" height="20.21" style="fill:rgb(109,74,6);"/>
+                </g>
+                <g transform="matrix(0.100523,-0.0716973,0.044064,0.163564,-526.69,-157.653)">
+                    <rect x="9.82" y="62.23" width="2.38" height="10.64" style="fill:rgb(109,74,6);"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -13,9 +13,13 @@ public class BoardManager : MonoBehaviour
     private bool pressed = false;
     private Tile higlightedTile = null;
     private int score = 0;
+
     public void Awake() {
         CreateBoard("abcabc");
+        // Self register at reference
+        Reference.GetInstance().boardManager = gameObject.GetComponent<BoardManager>();
     }
+
     public void CreateBoard(string seed)
     {
         LeanTween.init(500);

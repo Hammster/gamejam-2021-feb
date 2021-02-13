@@ -7,14 +7,12 @@ public sealed class Reference : MonoBehaviour
     private static readonly Reference instance = new Reference();
     public BoardManager boardManager;
 
-    static Reference() {
-    }
-    private Reference() {
-    }
+    static Reference() {}
 
-    void Awake() {
-        
-    }
+    private Reference() {}
+
+    void Awake() {}
+
     public static Reference GetInstance() {
         return instance;
     }

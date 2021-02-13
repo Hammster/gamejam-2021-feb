@@ -47,7 +47,7 @@ public class BoardManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K)) {
             if (!pressed) {
                 pressed = true;
-                FindMatches(0, 2);
+                CheckBoard();
             }
         } else {
             pressed = false;
@@ -58,24 +58,23 @@ public class BoardManager : MonoBehaviour
     Checks the board for any matches and removes matching tiles, triggers falling of tiles with empty tiles below and ensures that at least one possible match is available.
     */
     public void CheckBoard() {
-        Debug.Log("Checking board!");
         List<Vector2> allMatches = new List<Vector2>();
         // check for matches
         for (int x = 0; x < boardWidth; x++) {
             for (int y = 0; y < boardHeight; y++) {
                 if (allMatches.Contains(new Vector2(x,y))) {
-                    Debug.Log("skipped x: "+ x + ", y: "+ y);
                     continue;
                 }
                 List<Vector2> matches = FindMatches(x, y);
                 foreach (Vector2 tile in matches) {
                     allMatches.Add(tile);
                 }
-                Debug.Log("added "+matches.Count+" matches for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
+                if (matches.Count > 0)
+                    Debug.Log("added "+matches.Count+" matches for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
             }
         }
         
-        /*if (allMatches.Count > 0) {
+        if (allMatches.Count > 0) {
             // TODO: matches Tiles would have an effect (increase score, add items, move ship, etc)
             //TriggerMatch(allMatches);
 
@@ -85,8 +84,8 @@ public class BoardManager : MonoBehaviour
             ApplyGravity();
             
             // add new cells to refill board
-            AddNewCells();
-        }*/
+            //AddNewCells();
+        }
         // ensure at least 1 possible match exists
     }
 
@@ -103,12 +102,15 @@ public class BoardManager : MonoBehaviour
     void ApplyGravity() {
         for (int x = 0; x < boardWidth; x++) {
             for (int y = 0; y < boardHeight; y++) {
-                while(board[x,y] == null) {
-                    for (int current = y; current < boardHeight; current++) {
-                        if (current+1 >= boardHeight) {
-                            board[x,current] = null;
-                        } else {
-                            board[x,current] = board[x,current+1];
+                if (board[x,y] == null) {
+                    for (int above = y+1; above < boardHeight; above++) {
+                        if (board[x,above] != null) {
+                            Transform tileTransform = board[x,above].GetComponent<Transform>();
+                            // TODO: lean transform
+                            tileTransform.position = new Vector3(tileTransform.position.x, y * tileSize, tileTransform.position.z);
+                            board[x,y] = board[x,above];
+                            board[x,above] = null;
+                            break;
                         }
                     }
                 }
@@ -129,7 +131,7 @@ public class BoardManager : MonoBehaviour
 
     bool IsMatch(int x, int y, string technicalName, List<Vector2> list) {
         TileScriptableObject neighbourType = board[x,y].GetComponent<TileController>().tileSource;
-        Debug.Log("Neighbour type: "+neighbourType);
+        //Debug.Log("Neighbour type: "+neighbourType.technicalName +" to "+technicalName);
         if (neighbourType.technicalName.Equals(technicalName)) {
             list.Add(new Vector2(x,y));
             return true;
@@ -138,14 +140,13 @@ public class BoardManager : MonoBehaviour
     }
 
     List<Vector2> FindMatches(int x, int y) {
-        Debug.Log("Starting for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
+        //Debug.Log("Starting for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
         List<Vector2> potentialHorizontalMatches = new List<Vector2>();
         List<Vector2> potentialVerticalMatches = new List<Vector2>();
         TileScriptableObject type = board[x,y].GetComponent<TileController>().tileSource;
 
         // look horizontally to the left
         for (int i = x-1; i >= 0; i--) {
-            Debug.Log("left i="+i);
             if (!IsMatch(i, y, type.technicalName, potentialHorizontalMatches)) {
                 break;
             }
@@ -153,7 +154,6 @@ public class BoardManager : MonoBehaviour
 
         // look horizontally to the right
         for (int i = x+1; i < boardWidth; i++) {
-            Debug.Log("right i="+i);
             if (!IsMatch(i, y, type.technicalName, potentialHorizontalMatches)) {
                 break;
             }
@@ -161,15 +161,13 @@ public class BoardManager : MonoBehaviour
 
         // look vertically below
         for (int i = y-1; i >= 0; i--) {
-            Debug.Log("down i="+i);
             if (!IsMatch(x, i, type.technicalName, potentialVerticalMatches)) {
                 break;
             }
         }
 
         // look vertically above
-        for (int i = y+1; i < boardWidth; i++) {
-            Debug.Log("up i="+i);
+        for (int i = y+1; i < boardHeight; i++) {
             if (!IsMatch(x, i, type.technicalName, potentialVerticalMatches)) {
                 break;
             }

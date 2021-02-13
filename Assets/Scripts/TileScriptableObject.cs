@@ -6,7 +6,7 @@ using UnityEngine;
 public class TileScriptableObject : ScriptableObject
 {
     public string technicalName;
-    public Texture2D icon;
+    public Sprite sprite;
     // visual effect
     // sound
 }

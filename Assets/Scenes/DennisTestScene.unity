@@ -220,10 +220,5 @@ MonoBehaviour:
   boardWidth: 10
   boardHeight: 8
   tileSize: 4
-  tilePrefab: {fileID: 1519988328665136787, guid: 0e047d874aa4fc942805f416dfb91f44,
-    type: 3}
-  availableTileTypes:
-  - {fileID: 11400000, guid: f033ad58c38a10845aa51dce55aa983c, type: 2}
-  - {fileID: 11400000, guid: 8bbc4d3342e9bff44ad5e99a87fb7da5, type: 2}
-  - {fileID: 11400000, guid: 4f29587bfb25af94a8cec5a1c253775b, type: 2}
-  - {fileID: 11400000, guid: 9a1994685bfc5cf49960580c231bc239, type: 2}
+  tilePrefab: {fileID: 0}
+  availableTileTypes: []

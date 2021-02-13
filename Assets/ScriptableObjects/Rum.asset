@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rum
   m_EditorClassIdentifier: 
   technicalName: rum
-  fgSprite: {fileID: 3286163911610860551, guid: 27e65de5ae8406e4f9147708352617da,
+  fgSprite: {fileID: 3286163911610860551, guid: ebb7fc4b3fd21a54da1a70a172ed2b45,
     type: 3}
-  bgSprite: {fileID: 3286163911610860551, guid: db7856b865cac0e46a7790ce27f6df63,
+  bgSprite: {fileID: 3286163911610860551, guid: 91fc893be5f75b94c8795aff049bc7ad,
     type: 3}

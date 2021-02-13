@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CannonBall
   m_EditorClassIdentifier: 
   technicalName: cannonball
-  fgSprite: {fileID: 3286163911610860551, guid: 2147c124933dd4a48811e10367eadbcc,
+  fgSprite: {fileID: 3286163911610860551, guid: 9620b20a4f9db6540b1d824bd7d13932,
     type: 3}
-  bgSprite: {fileID: 3286163911610860551, guid: db7856b865cac0e46a7790ce27f6df63,
+  bgSprite: {fileID: 3286163911610860551, guid: 91fc893be5f75b94c8795aff049bc7ad,
     type: 3}

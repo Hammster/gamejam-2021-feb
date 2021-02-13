@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ExampleTile
   m_EditorClassIdentifier: 
   technicalName: example
-  fgSprite: {fileID: 3286163911610860551, guid: 3c07af2c192aef947b50a59014907f0d,
+  fgSprite: {fileID: 3286163911610860551, guid: 92a44487ef3b45f4c92a50ee3b92d92a,
     type: 3}
-  bgSprite: {fileID: 3286163911610860551, guid: db7856b865cac0e46a7790ce27f6df63,
+  bgSprite: {fileID: 3286163911610860551, guid: 91fc893be5f75b94c8795aff049bc7ad,
     type: 3}

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9994e9610ff09ac4ca8d900ba36dd029, type: 3}
-  m_Name: SpyGlass
+  m_Name: CannonBall
   m_EditorClassIdentifier: 
   technicalName: spyglass
-  fgSprite: {fileID: 3286163911610860551, guid: 467a2ee383c183b4e972667c287c5f9e,
+  fgSprite: {fileID: 3286163911610860551, guid: 2147c124933dd4a48811e10367eadbcc,
     type: 3}
-  bgSprite: {fileID: 3286163911610860551, guid: 0dc2c9b045ed55d459c9a1c1c174b148,
+  bgSprite: {fileID: 3286163911610860551, guid: db7856b865cac0e46a7790ce27f6df63,
     type: 3}

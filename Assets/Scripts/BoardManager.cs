@@ -10,12 +10,14 @@ public class BoardManager : MonoBehaviour
     public GameObject tilePrefab;
     public List<TileScriptableObject> availableTileTypes;
     private GameObject[,] board;
+    private bool pressed = false;
     
     public void Awake() {
-        CreateBoard();
+        CreateBoard("abcabc");
     }
-    public void CreateBoard()
+    public void CreateBoard(string seed)
     {
+        Random.InitState(seed.GetHashCode());
         // the game board with the lowest left tile being 0,0
         board = new GameObject[boardWidth,boardHeight];
         for (int x = 0; x < boardWidth; x++) {
@@ -41,25 +43,39 @@ public class BoardManager : MonoBehaviour
         tileController.Inititalize();
     }
 
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.K)) {
+            if (!pressed) {
+                pressed = true;
+                FindMatches(0, 2);
+            }
+        } else {
+            pressed = false;
+        }
+    }
+
     /**
     Checks the board for any matches and removes matching tiles, triggers falling of tiles with empty tiles below and ensures that at least one possible match is available.
     */
     public void CheckBoard() {
+        Debug.Log("Checking board!");
         List<Vector2> allMatches = new List<Vector2>();
         // check for matches
         for (int x = 0; x < boardWidth; x++) {
             for (int y = 0; y < boardHeight; y++) {
                 if (allMatches.Contains(new Vector2(x,y))) {
+                    Debug.Log("skipped x: "+ x + ", y: "+ y);
                     continue;
                 }
                 List<Vector2> matches = FindMatches(x, y);
                 foreach (Vector2 tile in matches) {
                     allMatches.Add(tile);
                 }
+                Debug.Log("added "+matches.Count+" matches for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
             }
         }
         
-        if (allMatches.Count > 0) {
+        /*if (allMatches.Count > 0) {
             // TODO: matches Tiles would have an effect (increase score, add items, move ship, etc)
             //TriggerMatch(allMatches);
 
@@ -70,7 +86,7 @@ public class BoardManager : MonoBehaviour
             
             // add new cells to refill board
             AddNewCells();
-        }
+        }*/
         // ensure at least 1 possible match exists
     }
 
@@ -111,47 +127,50 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    bool IsMatch(int x, int y, string technicalName, List<Vector2> list) {
+        TileScriptableObject neighbourType = board[x,y].GetComponent<TileController>().tileSource;
+        Debug.Log("Neighbour type: "+neighbourType);
+        if (neighbourType.technicalName.Equals(technicalName)) {
+            list.Add(new Vector2(x,y));
+            return true;
+        }
+        return false;
+    }
+
     List<Vector2> FindMatches(int x, int y) {
+        Debug.Log("Starting for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetComponent<TileController>().tileSource+")");
         List<Vector2> potentialHorizontalMatches = new List<Vector2>();
         List<Vector2> potentialVerticalMatches = new List<Vector2>();
         TileScriptableObject type = board[x,y].GetComponent<TileController>().tileSource;
-                
+
         // look horizontally to the left
         for (int i = x-1; i >= 0; i--) {
-            TileScriptableObject neighbourType = board[i,y].GetComponent<TileController>().tileSource;
-            if (neighbourType.Equals(type)) {
-                potentialHorizontalMatches.Add(new Vector2(i,y));
-            } else {
+            Debug.Log("left i="+i);
+            if (!IsMatch(i, y, type.technicalName, potentialHorizontalMatches)) {
                 break;
             }
         }
 
-        // look horizontally to the left
-        for (int i = x+1; i >= 0; i++) {
-            TileScriptableObject neighbourType = board[i,y].GetComponent<TileController>().tileSource;
-            if (neighbourType.Equals(type)) {
-                potentialHorizontalMatches.Add(new Vector2(i,y));
-            } else {
+        // look horizontally to the right
+        for (int i = x+1; i < boardWidth; i++) {
+            Debug.Log("right i="+i);
+            if (!IsMatch(i, y, type.technicalName, potentialHorizontalMatches)) {
                 break;
             }
         }
 
         // look vertically below
-        for (int i = x-1; i >= 0; i--) {
-            TileScriptableObject neighbourType = board[i,y].GetComponent<TileController>().tileSource;
-            if (neighbourType.Equals(type)) {
-                potentialVerticalMatches.Add(new Vector2(i,y));
-            } else {
+        for (int i = y-1; i >= 0; i--) {
+            Debug.Log("down i="+i);
+            if (!IsMatch(x, i, type.technicalName, potentialVerticalMatches)) {
                 break;
             }
         }
 
         // look vertically above
-        for (int i = x+1; i >= 0; i++) {
-            TileScriptableObject neighbourType = board[i,y].GetComponent<TileController>().tileSource;
-            if (neighbourType.Equals(type)) {
-                potentialVerticalMatches.Add(new Vector2(i,y));
-            } else {
+        for (int i = y+1; i < boardWidth; i++) {
+            Debug.Log("up i="+i);
+            if (!IsMatch(x, i, type.technicalName, potentialVerticalMatches)) {
                 break;
             }
         }

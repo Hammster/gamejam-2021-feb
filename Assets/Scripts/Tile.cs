@@ -29,4 +29,8 @@ public class Tile : MonoBehaviour
         }
         boardManager.ClickedTile(this);
     }
+
+    public void Highlight(bool highlight) {
+        
+    }
 }

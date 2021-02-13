@@ -12,11 +12,13 @@ public class BoardManager : MonoBehaviour
     private Tile[,] board;
     private bool pressed = false;
     private Tile higlightedTile = null;
+    private int score = 0;
     public void Awake() {
         CreateBoard("abcabc");
     }
     public void CreateBoard(string seed)
     {
+        LeanTween.init(500);
         Random.InitState(seed.GetHashCode());
         // the game board with the lowest left tile being 0,0
         board = new Tile[boardWidth,boardHeight];
@@ -25,20 +27,19 @@ public class BoardManager : MonoBehaviour
                 SpawnTile(x, y);
             }
         }
+        CheckBoard(false);
     }
 
     public void ClickedTile(Tile clicked) {
         
         if (higlightedTile == null) {
-            Debug.Log("I am highlighting");
             higlightedTile = clicked;
-            // TODO: add highlighting
+            higlightedTile.Highlight(true);
         } else {
-            Debug.Log("Not highlighting...");
             if (!higlightedTile.Equals(clicked)) {
-                Debug.Log("... but swapping!");
                 MakeMove(higlightedTile, clicked);
             }
+            higlightedTile.Highlight(false);
             higlightedTile = null;
         }
     } 
@@ -79,7 +80,7 @@ public class BoardManager : MonoBehaviour
     /**
     Checks the board for any matches and removes matching tiles, triggers falling of tiles with empty tiles below and ensures that at least one possible match is available.
     */
-    public void CheckBoard() {
+    void CheckBoard(bool countScore = true) {
         List<Vector2> allMatches = new List<Vector2>();
         // check for matches
         for (int x = 0; x < boardWidth; x++) {
@@ -93,28 +94,39 @@ public class BoardManager : MonoBehaviour
                         allMatches.Add(tile);
                     }
                 }
-                if (matches.Count >0) {
-                    Debug.Log("found "+matches.Count+" matches for tile x:"+x+", y:"+y);
-                }
             }
         }
         
+        if (countScore) {
+            score += allMatches.Count;
+            Debug.Log("SCORE: "+score);
+        }
+        
         if (allMatches.Count > 0) {
-            // TODO: matches Tiles would have an effect (increase score, add items, move ship, etc)
-            //TriggerMatch(allMatches);
-
-            RemoveTiles(allMatches);
-            
-            // empty tiles move down
-            ApplyGravity();
-            
-            // add new cells to refill board
-            AddNewCells();
-            
-            // re-check in case new tiles have formed new matches
-            CheckBoard();
+            StartCoroutine(CleanUpBoard(allMatches, countScore));
         }
         // TODO: ensure at least 1 possible match exists
+    }
+
+    IEnumerator CleanUpBoard(List<Vector2> allMatches, bool countScore) {
+        // TODO: matches Tiles would have an effect (increase score, add items, move ship, etc)
+        //TriggerMatch(allMatches);
+
+        RemoveTiles(allMatches);
+        if (countScore)
+            yield return new WaitForSeconds(0.33f);
+        
+        // empty tiles move down
+        ApplyGravity();
+        if (countScore)
+            yield return new WaitForSeconds(0.33f);
+        
+        // add new cells to refill board
+        AddNewCells();
+        
+        // re-check in case new tiles have formed new matches
+        CheckBoard(countScore);
+        yield return null;
     }
 
     void AddNewCells() {
@@ -146,12 +158,13 @@ public class BoardManager : MonoBehaviour
     }
 
     void RemoveTiles(List<Vector2> tiles) {
+        float animationTime = 0.33f;
         foreach (Vector2 tile in tiles) {
             int x = (int) tile.x;
             int y = (int) tile.y;
 
             Tile tileObject = board[x, y];
-            Destroy(tileObject.gameObject);
+            LeanTween.scale(tileObject.gameObject, new Vector3(0, 0, 0), animationTime).setEaseInOutExpo().setDestroyOnComplete(true);
             board[x, y] = null;
         }
     }
@@ -167,7 +180,7 @@ public class BoardManager : MonoBehaviour
     }
 
     List<Vector2> FindMatches(int x, int y) {
-        Debug.Log("Starting for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetTileType()+")");
+        //Debug.Log("Starting for x: "+ x + ", y: "+ y + "(tileType: "+board[x, y].GetTileType()+")");
         List<Vector2> potentialHorizontalMatches = new List<Vector2>();
         List<Vector2> potentialVerticalMatches = new List<Vector2>();
         TileScriptableObject type = board[x,y].GetTileType();
@@ -220,15 +233,26 @@ public class BoardManager : MonoBehaviour
 
     void MakeMove(Tile firstTile, Tile secondTile) {
         float animationTime = 0.33f;
-        int firstXIndex = firstTile.xIndex;
-        int firstYIndex = firstTile.yIndex;
+        int x1 = firstTile.xIndex;
+        int y1 = firstTile.yIndex;
+        int x2 = secondTile.xIndex;
+        int y2 = secondTile.yIndex;
 
-        board[firstTile.xIndex, firstTile.yIndex] = secondTile;
-        board[secondTile.xIndex, secondTile.yIndex] = firstTile;
+        if (Mathf.Abs(x1-x2) > 1 || Mathf.Abs(y1-y2) > 1) {
+            Debug.LogWarning("Invalid move was attempted!");
+            return;
+        }
+
+        board[x1, y1] = secondTile;
+        board[x2, y2] = firstTile;
 
         // animation
-        firstTile.MoveTile(secondTile.xIndex, secondTile.yIndex, animationTime, null);
-        secondTile.MoveTile(firstXIndex, firstYIndex, animationTime, CheckBoard);
+        firstTile.MoveTile(x2, y2, animationTime, null);
+        secondTile.MoveTile(x1, y1, animationTime, CheckBoard);
+    }
+
+    void CheckBoard() {
+        CheckBoard(true);
     }
 
 }

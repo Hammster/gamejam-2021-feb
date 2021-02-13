@@ -20,21 +20,25 @@ public class BoardManager : MonoBehaviour
         board = new GameObject[boardWidth,boardHeight];
         for (int x = 0; x < boardWidth; x++) {
             for (int y = 0; y < boardHeight; y++) {
-                float xPos = x * tileSize;
-                float yPos = y * tileSize;
-                
-                // create the actual tile element in the scene and store it
-                GameObject createdTile = MonoBehaviour.Instantiate(tilePrefab, new Vector3(xPos, yPos, 0.0f), Quaternion.identity);
-                board[x, y] = createdTile;
-
-                // set the tile's tile type
-                int rndIndex = Random.Range(0, availableTileTypes.Count);
-                TileScriptableObject tileType = availableTileTypes[rndIndex];
-                var tileController = createdTile.GetComponent<TileController>();
-                tileController.tileSource = tileType;
-                tileController.Inititalize();
+                SpawnTile(x, y);
             }
         }
+    }
+
+    void SpawnTile(int x, int y) {
+        float xPos = x * tileSize;
+        float yPos = y * tileSize;
+        
+        // create the actual tile element in the scene and store it
+        GameObject createdTile = MonoBehaviour.Instantiate(tilePrefab, new Vector3(xPos, yPos, 0.0f), Quaternion.identity);
+        board[x, y] = createdTile;
+
+        // set the tile's tile type
+        int rndIndex = Random.Range(0, availableTileTypes.Count);
+        TileScriptableObject tileType = availableTileTypes[rndIndex];
+        var tileController = createdTile.GetComponent<TileController>();
+        tileController.tileSource = tileType;
+        tileController.Inititalize();
     }
 
     /**
@@ -60,17 +64,38 @@ public class BoardManager : MonoBehaviour
             //TriggerMatch(allMatches);
 
             RemoveTiles(allMatches);
+            
+            // empty tiles move down
             ApplyGravity();
-            // TODO: add new cells on top to refill board
-            //AddNewCells();
+            
+            // add new cells to refill board
+            AddNewCells();
         }
         // ensure at least 1 possible match exists
+    }
+
+    void AddNewCells() {
+        for (int x = 0; x < boardWidth; x++) {
+            for (int y = 0; y < boardHeight; y++) {
+                if (board[x,y] == null) {
+                    SpawnTile(x, y);
+                }
+            }
+        }
     }
 
     void ApplyGravity() {
         for (int x = 0; x < boardWidth; x++) {
             for (int y = 0; y < boardHeight; y++) {
-
+                while(board[x,y] == null) {
+                    for (int current = y; current < boardHeight; current++) {
+                        if (current+1 >= boardHeight) {
+                            board[x,current] = null;
+                        } else {
+                            board[x,current] = board[x,current+1];
+                        }
+                    }
+                }
             }
         }
     }

@@ -30,7 +30,15 @@ public class Tile : MonoBehaviour
         boardManager.ClickedTile(this);
     }
 
-    public void Highlight(bool highlight) {
-        
+    public void Highlight(bool highlight)
+    {
+        if (highlight)
+        {
+            LeanTween.scale(gameObject ,new Vector3(3, 3, 3), 0.2f);
+        }
+        else
+        {
+            LeanTween.scale(gameObject ,new Vector3(4, 4, 4), 0.2f);
+        }
     }
 }

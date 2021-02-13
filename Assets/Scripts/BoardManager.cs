@@ -166,7 +166,7 @@ public class BoardManager : MonoBehaviour
             
             Tile tileObject = board[x, y];
             TileScriptableObject type = tileObject.GetTileType();
-            InventoryManager.GetInstance().EnableItem(type);
+            //InventoryManager.GetInstance().EnableItem(type);
             LeanTween.scale(tileObject.gameObject, new Vector3(0, 0, 0), animationTime).setEaseInOutExpo().setDestroyOnComplete(true);
             board[x, y] = null;
         }

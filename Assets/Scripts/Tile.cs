@@ -7,7 +7,6 @@ public class Tile : MonoBehaviour
     public int xIndex;
     public int yIndex;
     public static int TILE_SIZE = 4;
-
     public BoardManager boardManager;
 
     public void MoveTile(int xNew, int yNew, float animationTime, System.Action finalAction) {
@@ -25,6 +24,9 @@ public class Tile : MonoBehaviour
     }
 
     void OnMouseDown() {
+        if (boardManager == null) {
+            boardManager = Reference.GetInstance().boardManager;
+        }
         boardManager.ClickedTile(this);
     }
 }

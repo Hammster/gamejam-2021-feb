@@ -8,12 +8,14 @@ public class DevEnviromentLoader : MonoBehaviour
 {
     void Awake()
     {
-        GameObject check = GameObject.Find("__app");
-        if (check == null) 
+        var app = GameObject.Find("__app");
+        if (app == null) 
         { 
             var loadedScene = SceneManager.GetActiveScene().name;
             UnityEngine.SceneManagement.SceneManager.LoadScene("_preload");
             UnityEngine.SceneManagement.SceneManager.LoadScene(loadedScene);
+            app = GameObject.Find("__app");
         }
+        Reference.GetInstance().boardManager = GameObject.Find("BoardManager").GetComponent<BoardManager>();
     }
 }

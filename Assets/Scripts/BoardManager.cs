@@ -28,11 +28,15 @@ public class BoardManager : MonoBehaviour
     }
 
     public void ClickedTile(Tile clicked) {
+        
         if (higlightedTile == null) {
+            Debug.Log("I am highlighting");
             higlightedTile = clicked;
             // TODO: add highlighting
         } else {
-            if (!higlightedTile == clicked) {
+            Debug.Log("Not highlighting...");
+            if (!higlightedTile.Equals(clicked)) {
+                Debug.Log("... but swapping!");
                 MakeMove(higlightedTile, clicked);
             }
             higlightedTile = null;
@@ -106,8 +110,11 @@ public class BoardManager : MonoBehaviour
             
             // add new cells to refill board
             AddNewCells();
+            
+            // re-check in case new tiles have formed new matches
+            CheckBoard();
         }
-        // ensure at least 1 possible match exists
+        // TODO: ensure at least 1 possible match exists
     }
 
     void AddNewCells() {

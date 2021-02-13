@@ -113,10 +113,7 @@ public class BoardManager : MonoBehaviour
     }
 
     IEnumerator CleanUpBoard(List<Vector2> allMatches, bool countScore) {
-        // TODO: matches Tiles would have an effect (increase score, add items, move ship, etc)
-        //TriggerMatch(allMatches);
-
-        RemoveTiles(allMatches);
+        RemoveTilesAndTriggerMatches(allMatches);
         if (countScore)
             yield return new WaitForSeconds(0.33f);
         
@@ -161,13 +158,15 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void RemoveTiles(List<Vector2> tiles) {
+    void RemoveTilesAndTriggerMatches(List<Vector2> tiles) {
         float animationTime = 0.33f;
         foreach (Vector2 tile in tiles) {
             int x = (int) tile.x;
             int y = (int) tile.y;
-
+            
             Tile tileObject = board[x, y];
+            TileScriptableObject type = tileObject.GetTileType();
+            InventoryManager.GetInstance().EnableItem(type);
             LeanTween.scale(tileObject.gameObject, new Vector3(0, 0, 0), animationTime).setEaseInOutExpo().setDestroyOnComplete(true);
             board[x, y] = null;
         }

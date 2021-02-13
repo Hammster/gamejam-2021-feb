@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public sealed class InventoryManager : MonoBehaviour
 {
-
+    private static readonly InventoryManager instance = new InventoryManager();    
     public List<InventorySlot> inventorySlots;
   
     public void EnableItem(TileScriptableObject tileScriptableObject)
@@ -28,5 +28,13 @@ public class InventoryManager : MonoBehaviour
                 inventorySlot.DisableItem();
             }
         }
+    }
+
+    public static InventoryManager GetInstance() {
+        return instance;
+    }
+    static InventoryManager() {
+    }
+    private InventoryManager() {
     }
 }

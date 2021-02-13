@@ -12,7 +12,9 @@ public class TileController : MonoBehaviour
     }
 
     public void Inititalize() {
-        var sr = gameObject.transform.Find("Icon").GetComponent<SpriteRenderer>();
-        sr.sprite = tileSource.sprite;
+        var fgsr = gameObject.transform.Find("Icon").GetComponent<SpriteRenderer>();
+        var bgsr = gameObject.GetComponent<SpriteRenderer>();
+        fgsr.sprite = tileSource.fgSprite;
+        bgsr.sprite = tileSource.bgSprite;
     }
 }

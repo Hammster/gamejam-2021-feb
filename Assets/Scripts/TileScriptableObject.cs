@@ -6,7 +6,8 @@ using UnityEngine;
 public class TileScriptableObject : ScriptableObject
 {
     public string technicalName;
-    public Sprite sprite;
+    public Sprite fgSprite;
+    public Sprite bgSprite;
     // visual effect
     // sound
 }
